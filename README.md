@@ -37,6 +37,7 @@ If you can do something cool with it, even better!
 Simply build `lx.c` with any C11-compatible compiler. Since there are absolutely no dependencies, this should Just Work.
 If you want to include the bundled CLI, set `LX_BUILD_CLI` in your build flags.
 
+If you simply want to test lx out, a prebuilt CLI is provided under releases.
 
 ## The CLI
 The lx cli can be launched standalone to fire up a REPL environment, where each line fed to stdin is evaluated in a persistent scope through the lifetime of the program.
