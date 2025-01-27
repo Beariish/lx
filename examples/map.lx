@@ -1,0 +1,14 @@
+` Creates a new list by applying fn to all elements of xs
+= map '(xs fn) (
+	= ys [] ` Create empty list
+	%xs x (#ys fn x) ` For each x in xs, append fn of x to ys
+	ys `Return ys
+)
+
+= double 'x * x 2
+
+` Create list of doubled values
+= dbs map [1 2 3 4 5 6] @double
+
+` Print the result, separated by newlines
+%dbs d (, d;)

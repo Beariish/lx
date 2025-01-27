@@ -1,0 +1,116 @@
+` This one doesn't quite work and I'm too stupid to fully solve it 
+` It tries its best though
+` print_board and is_valid are both fine, though
+
+= mod '(x y) - x (* y _ - / x y 0.5)
+
+= is_valid '(board row col num) (
+    = x 0
+    = valid 1
+    ^ < x 9 (
+        ? == num (. (. board row) x) (= valid 0) ()
+        = x + x 1
+    )
+
+    ? valid (
+        = x 0
+        ^ < x 9 (
+            ? == num (. (. board x) col) (= valid 0) ()
+            = x + x 1
+        )
+    ) ()
+
+    ? valid (
+        = sr - row mod row 3
+        = sc - col mod col 3
+        = r 0
+        ^ < r 3 (
+            = c 0
+            ^ < c 3 (
+                ? == (. (. board + sr r) + sc c) num (= valid 0) ()
+                = c + c 1
+            )
+
+            = r + r 1
+        )
+    ) ()
+
+    valid
+)
+
+= solve 'board (
+    = solved 0
+    = failed 0
+
+    = row 0
+    ^ < row 9 (
+        ? | !solved !failed (
+            = col 0
+            ^ < col 9 (
+                ? == (. (. board row) col) 0 (
+                    ? | !solved !failed (
+                        = num 1
+                        ^ < num 10 (
+                            ? & !solved (is_valid board row col num) (
+                                : (. board row) col num
+                                = solved solve board
+                                ? solved () (: (. board row) col 0)
+                            ) ()
+                            = num + num 1
+                        )
+                        ? solved () (= failed 1)
+                    ) ()
+                ) ()
+                = col + col 1
+            )
+        ) ()
+        = row + row 1
+    )
+
+    & solved !failed
+)
+
+= print_board 'board (
+    , "|" (= i 0 ^ < i 29 (, "-" = i + i 1)) , "|" ;
+    (
+        = r 0
+        ^ < r 9 (
+            = c 0
+            , "|"
+            ^ < c 9 (
+                = n (. (. board r) c)
+                , " " ? == n 0 (, " ") (, n) , " "
+                ? == (mod + c 1 3) 0 (, "|") ()
+                = c + c 1
+            );
+
+            ? == (mod + r 1 3) 0 (
+                , "|" (= i 0 ^ < i 29 (, "-" = i + i 1)) , "|" ;
+            ) ()
+
+            = r + r 1
+        )
+    )
+)
+
+= board [
+    [2 1 0 0 9 0 0 4 5]
+    [0 9 0 0 5 1 8 0 2]
+    [7 5 0 4 0 0 0 0 0]
+    [0 0 0 0 0 0 3 0 8]
+    [1 0 0 3 6 7 4 0 0]
+    [0 7 4 8 0 0 0 0 1]
+    [5 3 1 2 0 6 0 0 4]
+    [8 2 0 9 4 5 6 0 3]
+    [0 4 0 0 0 8 0 0 0]
+]
+
+, "Board start:";
+print_board board
+
+; , "Solving...";;
+
+= solved solve board
+
+, "Board end (" , solved , "):" ;
+print_board board

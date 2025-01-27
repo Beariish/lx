@@ -1,0 +1,43 @@
+= sqrt 'x (
+    = left 0
+    = right x
+
+    ^ > (- right left) 0.0000000000001 (
+        = mid / + left right 2
+        ? > (* mid mid) x (= right mid) (= left mid)
+    )
+
+    _ left
+)
+
+= sieve 'n (
+    = is_prime []
+    (= i 0 ^ < i (+ n 1) (#is_prime 1 = i + i 1))
+
+    = p 2
+    = max sqrt n
+    ^ <= p max (
+        ? (. is_prime p) (
+            = i * p p
+            ^ <= i n (
+                : is_prime i 0
+                = i + i p
+            )
+        ) ()
+        = p + p 1
+    ) 
+    
+    = result []
+    = p 2
+    ^ <= p n (
+        ? (. is_prime p) (#result p) ()
+        = p + p 1
+    )
+
+    result
+)
+
+= primes sieve 1000
+
+, "All (" , $primes , ") primes below 1000 are:";
+%primes p (, p , " ");
